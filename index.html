@@ -6,6 +6,75 @@
 <title>OSS' - Original Sandwich Shop | Lille</title>
 <meta name="description" content="OSS' Original Sandwich Shop - Le Sandwich qui se fout pas de ta gueule. Burgers, Sandwichs, Matlouh, Baguettes à Lille.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🥖</text></svg>">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#FF6B00">
+<meta property="og:title" content="OSS' - Original Sandwich Shop | Lille">
+<meta property="og:description" content="Le Sandwich qui se fout pas de ta gueule. Burgers, Sandwichs, Matlouh, Baguettes à Lille.">
+<meta property="og:image" content="images/img_04.jpg">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="fr_FR">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Restaurant",
+  "name": "OSS' Original Sandwich Shop",
+  "description": "Le Sandwich qui se fout pas de ta gueule",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "2 Place Philippe de Girard",
+    "addressLocality": "Lille",
+    "postalCode": "59800",
+    "addressCountry": "FR"
+  },
+  "geo": {"@type": "GeoCoordinates", "latitude": 50.6292, "longitude": 3.0574},
+  "servesCuisine": ["Sandwich", "Burger", "Fast Food"],
+  "sameAs": ["https://www.instagram.com/oss_lille/"],
+  "openingHoursSpecification": [
+    {"@type": "OpeningHoursSpecification", "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday"], "opens": "11:30", "closes": "14:30"},
+    {"@type": "OpeningHoursSpecification", "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday"], "opens": "19:00", "closes": "23:59"},
+    {"@type": "OpeningHoursSpecification", "dayOfWeek": ["Friday","Saturday"], "opens": "19:00", "closes": "02:00"},
+    {"@type": "OpeningHoursSpecification", "dayOfWeek": ["Saturday"], "opens": "11:30", "closes": "14:30"},
+    {"@type": "OpeningHoursSpecification", "dayOfWeek": ["Sunday"], "opens": "19:00", "closes": "23:59"}
+  ]
+}
+
+// Badge ouvert / fermé
+(function(){
+  const s=document.getElementById('statusBadge');
+  const n=new Date(),d=n.getDay(),t=n.getHours()*60+n.getMinutes();
+  let open=false;
+  if(d>=1&&d<=4) open=(t>=690&&t<=870)||(t>=1140);
+  if(d===5)      open=t>=1140;
+  if(d===6)      open=(t>=690&&t<=870)||(t>=1140);
+  if(d===0)      open=t>=1140;
+  s.textContent=open?'Ouvert maintenant':'Fermé';
+  s.className='status-badge '+(open?'open':'closed');
+  setTimeout(()=>s.classList.add('show'),300);
+})();
+
+// Lightbox
+(function(){
+  const imgs=[...document.querySelectorAll('.gallery-grid img')];
+  let idx=0;
+  const lb=document.getElementById('lightbox');
+  const lbImg=document.getElementById('lbImg');
+  function open(i){idx=i;lbImg.src=imgs[i].src;lb.classList.add('active');}
+  function close(){lb.classList.remove('active');}
+  function nav(dir){idx=(idx+dir+imgs.length)%imgs.length;lbImg.src=imgs[idx].src;}
+  imgs.forEach((img,i)=>img.addEventListener('click',()=>open(i)));
+  document.getElementById('lbClose').onclick=close;
+  document.getElementById('lbPrev').onclick=()=>nav(-1);
+  document.getElementById('lbNext').onclick=()=>nav(1);
+  lb.addEventListener('click',e=>{if(e.target===lb)close();});
+  document.addEventListener('keydown',e=>{
+    if(!lb.classList.contains('active'))return;
+    if(e.key==='Escape')close();
+    if(e.key==='ArrowLeft')nav(-1);
+    if(e.key==='ArrowRight')nav(1);
+  });
+})();
+</script>
 <link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Oswald:wght@400;600;700&family=Barlow+Condensed:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
@@ -103,6 +172,23 @@ footer a{color:var(--orange);text-decoration:none;}
   .map-container iframe{height:280px;}
   nav ul li a{font-size:18px;}
 }
+
+/* Badge statut */
+.status-badge{position:fixed;top:76px;right:16px;z-index:98;padding:5px 12px;border-radius:20px;font-family:'Oswald',sans-serif;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;opacity:0;transition:opacity 0.4s;pointer-events:none;}
+.status-badge.open{background:rgba(6,193,103,0.92);color:#fff;}
+.status-badge.closed{background:rgba(230,57,70,0.92);color:#fff;}
+.status-badge.show{opacity:1;}
+
+/* Lightbox */
+.lightbox{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.93);z-index:2000;align-items:center;justify-content:center;}
+.lightbox.active{display:flex;}
+.lightbox img{max-width:90vw;max-height:88vh;object-fit:contain;border-radius:8px;border:2px solid var(--orange);cursor:default;}
+.lb-close{position:absolute;top:18px;right:26px;font-size:2.4rem;color:var(--white);cursor:pointer;line-height:1;opacity:0.8;transition:opacity 0.2s;}
+.lb-close:hover{opacity:1;}
+.lb-prev,.lb-next{position:absolute;top:50%;transform:translateY(-50%);font-size:1.8rem;color:var(--white);cursor:pointer;width:48px;height:48px;display:flex;align-items:center;justify-content:center;background:rgba(255,107,0,0.35);border-radius:50%;transition:background 0.2s;}
+.lb-prev{left:16px;}.lb-next{right:16px;}
+.lb-prev:hover,.lb-next:hover{background:var(--orange);}
+.gallery-grid img{cursor:zoom-in;}
 </style>
 </head>
 <body>
@@ -110,7 +196,7 @@ footer a{color:var(--orange);text-decoration:none;}
 <div class="bg-graffiti"></div>
 
 <nav>
-  <img src="images/img_03.jpg" alt="OSS Logo" class="logo-nav">
+  <picture><source srcset="images/img_03.webp" type="image/webp"><img src="images/img_03.jpg" alt="OSS Logo" class="logo-nav"></picture>
   <ul id="navMenu">
     <li><a href="#menu" onclick="closeMenu()">Menu</a></li>
     <li><a href="#galerie" onclick="closeMenu()">Galerie</a></li>
@@ -121,10 +207,11 @@ footer a{color:var(--orange);text-decoration:none;}
     <span></span><span></span><span></span>
   </div>
 </nav>
+<div class="status-badge" id="statusBadge"></div>
 
 <section class="hero">
   <div class="hero-content">
-    <img src="images/img_04.jpg" alt="OSS' Logo" class="logo-main">
+    <picture><source srcset="images/img_04.webp" type="image/webp"><img src="images/img_04.jpg" alt="OSS' Logo" class="logo-main"></picture>
     <h1>OSS'</h1>
     <p class="tagline">Original Sandwich Shop</p>
     <p class="sub">Le Sandwich qui se fout pas de ta g***** &bull; Lille</p>
@@ -216,14 +303,14 @@ footer a{color:var(--orange);text-decoration:none;}
   <div class="gallery-grid fade-in">
     <img src="images/img_05.jpg" alt="Baguettes OSS" loading="lazy">
     <img src="images/img_06.jpg" alt="Matlouh OSS" loading="lazy">
-    <img src="images/img_07.jpg" alt="Burger OSS" loading="lazy">
+    <picture><source srcset="images/img_07.webp" type="image/webp"><img src="images/img_07.jpg" alt="Burger OSS" loading="lazy"></picture>
     <img src="images/img_08.jpg" alt="Burgers OSS" loading="lazy">
     <img src="images/img_09.jpg" alt="Tenders OSS" loading="lazy">
-    <img src="images/img_10.jpg" alt="Sandwich OSS" loading="lazy">
+    <picture><source srcset="images/img_10.webp" type="image/webp"><img src="images/img_10.jpg" alt="Sandwich OSS" loading="lazy"></picture>
     <img src="images/img_11.jpg" alt="Crousty Box OSS" loading="lazy">
     <img src="images/img_12.jpg" alt="Crousty Box OSS" loading="lazy">
-    <img src="images/img_13.jpg" alt="Burgers OSS" loading="lazy">
-    <img src="images/img_14.jpg" alt="Burger OSS" loading="lazy">
+    <picture><source srcset="images/img_13.webp" type="image/webp"><img src="images/img_13.jpg" alt="Burgers OSS" loading="lazy"></picture>
+    <picture><source srcset="images/img_14.webp" type="image/webp"><img src="images/img_14.jpg" alt="Burger OSS" loading="lazy"></picture>
   </div>
 </section>
 
@@ -269,6 +356,49 @@ function toggleMenu(){document.getElementById('navMenu').classList.toggle('activ
 function closeMenu(){document.getElementById('navMenu').classList.remove('active');}
 const observer=new IntersectionObserver((entries)=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');}});},{threshold:0.1});
 document.querySelectorAll('.fade-in').forEach(el=>observer.observe(el));
+
+// Badge ouvert / fermé
+(function(){
+  const s=document.getElementById('statusBadge');
+  const n=new Date(),d=n.getDay(),t=n.getHours()*60+n.getMinutes();
+  let open=false;
+  if(d>=1&&d<=4) open=(t>=690&&t<=870)||(t>=1140);
+  if(d===5)      open=t>=1140;
+  if(d===6)      open=(t>=690&&t<=870)||(t>=1140);
+  if(d===0)      open=t>=1140;
+  s.textContent=open?'Ouvert maintenant':'Fermé';
+  s.className='status-badge '+(open?'open':'closed');
+  setTimeout(()=>s.classList.add('show'),300);
+})();
+
+// Lightbox
+(function(){
+  const imgs=[...document.querySelectorAll('.gallery-grid img')];
+  let idx=0;
+  const lb=document.getElementById('lightbox');
+  const lbImg=document.getElementById('lbImg');
+  function open(i){idx=i;lbImg.src=imgs[i].src;lb.classList.add('active');}
+  function close(){lb.classList.remove('active');}
+  function nav(dir){idx=(idx+dir+imgs.length)%imgs.length;lbImg.src=imgs[idx].src;}
+  imgs.forEach((img,i)=>img.addEventListener('click',()=>open(i)));
+  document.getElementById('lbClose').onclick=close;
+  document.getElementById('lbPrev').onclick=()=>nav(-1);
+  document.getElementById('lbNext').onclick=()=>nav(1);
+  lb.addEventListener('click',e=>{if(e.target===lb)close();});
+  document.addEventListener('keydown',e=>{
+    if(!lb.classList.contains('active'))return;
+    if(e.key==='Escape')close();
+    if(e.key==='ArrowLeft')nav(-1);
+    if(e.key==='ArrowRight')nav(1);
+  });
+})();
 </script>
+
+<div class="lightbox" id="lightbox">
+  <span class="lb-close" id="lbClose">&times;</span>
+  <span class="lb-prev" id="lbPrev">&#8249;</span>
+  <img id="lbImg" src="" alt="Photo OSS">
+  <span class="lb-next" id="lbNext">&#8250;</span>
+</div>
 </body>
 </html>
