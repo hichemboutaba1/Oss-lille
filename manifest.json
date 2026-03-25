@@ -1,17 +1,27 @@
 {
   "name": "OSS' Original Sandwich Shop",
   "short_name": "OSS' Lille",
-  "description": "Le Sandwich qui se fout pas de ta gueule",
-  "start_url": "./index.html",
+  "description": "Le Sandwich qui se fout pas de ta gueule — Burgers, Sandwichs, Matlouh, Baguettes à Lille.",
+  "start_url": "./",
+  "scope": "./",
   "display": "standalone",
+  "orientation": "portrait-primary",
   "background_color": "#0a0a0a",
   "theme_color": "#FF6B00",
+  "lang": "fr",
+  "categories": ["food", "restaurants"],
   "icons": [
     {
       "src": "images/img_04.jpg",
       "sizes": "192x192",
       "type": "image/jpeg",
-      "purpose": "any maskable"
+      "purpose": "any"
+    },
+    {
+      "src": "images/img_04.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg",
+      "purpose": "maskable"
     }
   ]
 }
