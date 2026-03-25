@@ -6,12 +6,15 @@
 <title>OSS' - Original Sandwich Shop | Lille</title>
 <meta name="description" content="OSS' Original Sandwich Shop - Le Sandwich qui se fout pas de ta gueule. Burgers, Sandwichs, Matlouh, Baguettes à Lille.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="image" href="images/img_04.webp" type="image/webp">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🥖</text></svg>">
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#FF6B00">
 <meta property="og:title" content="OSS' - Original Sandwich Shop | Lille">
 <meta property="og:description" content="Le Sandwich qui se fout pas de ta gueule. Burgers, Sandwichs, Matlouh, Baguettes à Lille.">
-<meta property="og:image" content="images/img_04.jpg">
+<meta property="og:image" content="https://hichemboutaba1.github.io/Oss-lille/images/img_04.jpg">
+<meta property="og:url" content="https://hichemboutaba1.github.io/Oss-lille/">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="fr_FR">
 <script type="application/ld+json">
@@ -38,42 +41,6 @@
     {"@type": "OpeningHoursSpecification", "dayOfWeek": ["Sunday"], "opens": "19:00", "closes": "23:59"}
   ]
 }
-
-// Badge ouvert / fermé
-(function(){
-  const s=document.getElementById('statusBadge');
-  const n=new Date(),d=n.getDay(),t=n.getHours()*60+n.getMinutes();
-  let open=false;
-  if(d>=1&&d<=4) open=(t>=690&&t<=870)||(t>=1140);
-  if(d===5)      open=t>=1140;
-  if(d===6)      open=(t>=690&&t<=870)||(t>=1140);
-  if(d===0)      open=t>=1140;
-  s.textContent=open?'Ouvert maintenant':'Fermé';
-  s.className='status-badge '+(open?'open':'closed');
-  setTimeout(()=>s.classList.add('show'),300);
-})();
-
-// Lightbox
-(function(){
-  const imgs=[...document.querySelectorAll('.gallery-grid img')];
-  let idx=0;
-  const lb=document.getElementById('lightbox');
-  const lbImg=document.getElementById('lbImg');
-  function open(i){idx=i;lbImg.src=imgs[i].src;lb.classList.add('active');}
-  function close(){lb.classList.remove('active');}
-  function nav(dir){idx=(idx+dir+imgs.length)%imgs.length;lbImg.src=imgs[idx].src;}
-  imgs.forEach((img,i)=>img.addEventListener('click',()=>open(i)));
-  document.getElementById('lbClose').onclick=close;
-  document.getElementById('lbPrev').onclick=()=>nav(-1);
-  document.getElementById('lbNext').onclick=()=>nav(1);
-  lb.addEventListener('click',e=>{if(e.target===lb)close();});
-  document.addEventListener('keydown',e=>{
-    if(!lb.classList.contains('active'))return;
-    if(e.key==='Escape')close();
-    if(e.key==='ArrowLeft')nav(-1);
-    if(e.key==='ArrowRight')nav(1);
-  });
-})();
 </script>
 <link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Oswald:wght@400;600;700&family=Barlow+Condensed:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
@@ -189,6 +156,13 @@ footer a{color:var(--orange);text-decoration:none;}
 .lb-prev{left:16px;}.lb-next{right:16px;}
 .lb-prev:hover,.lb-next:hover{background:var(--orange);}
 .gallery-grid img{cursor:zoom-in;}
+.horaire-row.today{background:rgba(255,107,0,0.1);border-radius:10px;padding-left:10px;padding-right:10px;border-left:3px solid var(--orange);}
+.horaire-row.today .horaire-day{color:var(--orange);}
+
+/* Retour en haut */
+.back-top{position:fixed;bottom:90px;right:24px;z-index:97;width:44px;height:44px;background:rgba(255,107,0,0.85);color:#fff;border:none;border-radius:50%;font-size:1.3rem;cursor:pointer;display:flex;align-items:center;justify-content:center;opacity:0;transform:translateY(10px);transition:opacity 0.3s,transform 0.3s;pointer-events:none;}
+.back-top.show{opacity:1;transform:translateY(0);pointer-events:auto;}
+.back-top:hover{background:var(--orange);}
 </style>
 </head>
 <body>
@@ -217,8 +191,8 @@ footer a{color:var(--orange);text-decoration:none;}
     <p class="sub">Le Sandwich qui se fout pas de ta g***** &bull; Lille</p>
     <div class="cta-buttons">
       <a href="#menu" class="btn btn-orange">Voir le Menu</a>
-      <a href="https://www.ubereats.com/store-browse-uuid/07921c6d-6146-4683-98dc-644899de0041?diningMode=DELIVERY" target="_blank" class="btn btn-uber">&#x1F6F5; Commander sur Uber Eats</a>
-      <a href="https://www.instagram.com/oss_lille/" target="_blank" class="btn btn-outline">&#x1F4F8; Instagram</a>
+      <a href="https://www.ubereats.com/store-browse-uuid/07921c6d-6146-4683-98dc-644899de0041?diningMode=DELIVERY" target="_blank" rel="noopener noreferrer" class="btn btn-uber">&#x1F6F5; Commander sur Uber Eats</a>
+      <a href="https://www.instagram.com/oss_lille/" target="_blank" rel="noopener noreferrer" class="btn btn-outline">&#x1F4F8; Instagram</a>
     </div>
   </div>
 </section>
@@ -301,14 +275,14 @@ footer a{color:var(--orange);text-decoration:none;}
   <h2 class="section-title fade-in">Galerie</h2>
   <div class="section-line"></div>
   <div class="gallery-grid fade-in">
-    <img src="images/img_05.jpg" alt="Baguettes OSS" loading="lazy">
-    <img src="images/img_06.jpg" alt="Matlouh OSS" loading="lazy">
+    <picture><source srcset="images/img_05.webp" type="image/webp"><img src="images/img_05.jpg" alt="Baguettes OSS" loading="lazy"></picture>
+    <picture><source srcset="images/img_06.webp" type="image/webp"><img src="images/img_06.jpg" alt="Matlouh OSS" loading="lazy"></picture>
     <picture><source srcset="images/img_07.webp" type="image/webp"><img src="images/img_07.jpg" alt="Burger OSS" loading="lazy"></picture>
-    <img src="images/img_08.jpg" alt="Burgers OSS" loading="lazy">
-    <img src="images/img_09.jpg" alt="Tenders OSS" loading="lazy">
+    <picture><source srcset="images/img_08.webp" type="image/webp"><img src="images/img_08.jpg" alt="Burgers OSS" loading="lazy"></picture>
+    <picture><source srcset="images/img_09.webp" type="image/webp"><img src="images/img_09.jpg" alt="Tenders OSS" loading="lazy"></picture>
     <picture><source srcset="images/img_10.webp" type="image/webp"><img src="images/img_10.jpg" alt="Sandwich OSS" loading="lazy"></picture>
-    <img src="images/img_11.jpg" alt="Crousty Box OSS" loading="lazy">
-    <img src="images/img_12.jpg" alt="Crousty Box OSS" loading="lazy">
+    <picture><source srcset="images/img_11.webp" type="image/webp"><img src="images/img_11.jpg" alt="Crousty Box OSS" loading="lazy"></picture>
+    <picture><source srcset="images/img_12.webp" type="image/webp"><img src="images/img_12.jpg" alt="Crousty Box OSS" loading="lazy"></picture>
     <picture><source srcset="images/img_13.webp" type="image/webp"><img src="images/img_13.jpg" alt="Burgers OSS" loading="lazy"></picture>
     <picture><source srcset="images/img_14.webp" type="image/webp"><img src="images/img_14.jpg" alt="Burger OSS" loading="lazy"></picture>
   </div>
@@ -318,13 +292,13 @@ footer a{color:var(--orange);text-decoration:none;}
   <h2 class="section-title fade-in">Horaires</h2>
   <div class="section-line"></div>
   <div class="horaires-container fade-in">
-    <div class="horaire-row"><span class="horaire-day">Lundi</span><span class="horaire-times">11h30 - 14h30<br>19h00 - Minuit</span></div>
-    <div class="horaire-row"><span class="horaire-day">Mardi</span><span class="horaire-times">11h30 - 14h30<br>19h00 - Minuit</span></div>
-    <div class="horaire-row"><span class="horaire-day">Mercredi</span><span class="horaire-times">11h30 - 14h30<br>19h00 - Minuit</span></div>
-    <div class="horaire-row"><span class="horaire-day">Jeudi</span><span class="horaire-times">11h30 - 14h30<br>19h00 - Minuit</span></div>
-    <div class="horaire-row"><span class="horaire-day">Vendredi</span><span class="horaire-times">19h00 - 02h00</span></div>
-    <div class="horaire-row"><span class="horaire-day">Samedi</span><span class="horaire-times">11h30 - 14h30<br>19h00 - 02h00</span></div>
-    <div class="horaire-row"><span class="horaire-day">Dimanche</span><span class="horaire-times">19h00 - Minuit</span></div>
+    <div class="horaire-row" data-day="1"><span class="horaire-day">Lundi</span><span class="horaire-times">11h30 - 14h30<br>19h00 - Minuit</span></div>
+    <div class="horaire-row" data-day="2"><span class="horaire-day">Mardi</span><span class="horaire-times">11h30 - 14h30<br>19h00 - Minuit</span></div>
+    <div class="horaire-row" data-day="3"><span class="horaire-day">Mercredi</span><span class="horaire-times">11h30 - 14h30<br>19h00 - Minuit</span></div>
+    <div class="horaire-row" data-day="4"><span class="horaire-day">Jeudi</span><span class="horaire-times">11h30 - 14h30<br>19h00 - Minuit</span></div>
+    <div class="horaire-row" data-day="5"><span class="horaire-day">Vendredi</span><span class="horaire-times">19h00 - 02h00</span></div>
+    <div class="horaire-row" data-day="6"><span class="horaire-day">Samedi</span><span class="horaire-times">11h30 - 14h30<br>19h00 - 02h00</span></div>
+    <div class="horaire-row" data-day="0"><span class="horaire-day">Dimanche</span><span class="horaire-times">19h00 - Minuit</span></div>
   </div>
 </section>
 
@@ -333,8 +307,8 @@ footer a{color:var(--orange);text-decoration:none;}
   <div class="section-line"></div>
   <div class="info-grid fade-in">
     <div class="info-card"><div class="icon">&#x1F4CD;</div><h4>Adresse</h4><p>2 Place Philippe de Girard<br>59800 Lille</p></div>
-    <div class="info-card"><div class="icon">&#x1F4F1;</div><h4>Reseaux</h4><p><a href="https://www.instagram.com/oss_lille/" target="_blank">@oss_lille</a></p></div>
-    <div class="info-card"><div class="icon">&#x1F6F5;</div><h4>Livraison</h4><p><a href="https://www.ubereats.com/store-browse-uuid/07921c6d-6146-4683-98dc-644899de0041?diningMode=DELIVERY" target="_blank">Commander sur Uber Eats</a><br><small>Code promo : <strong>eats-bm4vod2ibu</strong></small></p></div>
+    <div class="info-card"><div class="icon">&#x1F4F1;</div><h4>Reseaux</h4><p><a href="https://www.instagram.com/oss_lille/" target="_blank" rel="noopener noreferrer">@oss_lille</a></p></div>
+    <div class="info-card"><div class="icon">&#x1F6F5;</div><h4>Livraison</h4><p><a href="https://www.ubereats.com/store-browse-uuid/07921c6d-6146-4683-98dc-644899de0041?diningMode=DELIVERY" target="_blank" rel="noopener noreferrer">Commander sur Uber Eats</a><br><small>Code promo : <strong>eats-bm4vod2ibu</strong></small></p></div>
   </div>
   <div class="map-container fade-in">
     <iframe
@@ -347,9 +321,17 @@ footer a{color:var(--orange);text-decoration:none;}
   </div>
 </section>
 
-<a href="https://www.ubereats.com/store-browse-uuid/07921c6d-6146-4683-98dc-644899de0041?diningMode=DELIVERY" target="_blank" class="uber-float btn btn-uber" style="padding:14px 20px;font-size:0.85rem;">&#x1F6F5; Uber Eats</a>
+<a href="https://www.ubereats.com/store-browse-uuid/07921c6d-6146-4683-98dc-644899de0041?diningMode=DELIVERY" target="_blank" rel="noopener noreferrer" class="uber-float btn btn-uber" style="padding:14px 20px;font-size:0.85rem;">&#x1F6F5; Uber Eats</a>
 
-<footer><p>&copy; 2025 OSS' - Original Sandwich Shop - Lille - <a href="https://www.instagram.com/oss_lille/" target="_blank">@oss_lille</a></p></footer>
+<footer><p>&copy; 2026 OSS' - Original Sandwich Shop - Lille - <a href="https://www.instagram.com/oss_lille/" target="_blank" rel="noopener noreferrer">@oss_lille</a></p></footer>
+
+<button class="back-top" id="backTop" title="Retour en haut" aria-label="Retour en haut">&#8679;</button>
+<div class="lightbox" id="lightbox">
+  <span class="lb-close" id="lbClose">&times;</span>
+  <span class="lb-prev" id="lbPrev">&#8249;</span>
+  <img id="lbImg" src="" alt="Photo OSS">
+  <span class="lb-next" id="lbNext">&#8250;</span>
+</div>
 
 <script>
 function toggleMenu(){document.getElementById('navMenu').classList.toggle('active');}
@@ -392,13 +374,31 @@ document.querySelectorAll('.fade-in').forEach(el=>observer.observe(el));
     if(e.key==='ArrowRight')nav(1);
   });
 })();
-</script>
 
-<div class="lightbox" id="lightbox">
-  <span class="lb-close" id="lbClose">&times;</span>
-  <span class="lb-prev" id="lbPrev">&#8249;</span>
-  <img id="lbImg" src="" alt="Photo OSS">
-  <span class="lb-next" id="lbNext">&#8250;</span>
-</div>
+// Retour en haut
+(function(){
+  const btn=document.getElementById('backTop');
+  window.addEventListener('scroll',()=>{btn.classList.toggle('show',window.scrollY>400);},{passive:true});
+  btn.addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
+})();
+
+// Surligner le jour actuel dans les horaires
+(function(){
+  const today=new Date().getDay();
+  const row=document.querySelector('.horaire-row[data-day="'+today+'"]');
+  if(row)row.classList.add('today');
+})();
+
+// Swipe mobile lightbox
+(function(){
+  const lb=document.getElementById('lightbox');
+  let sx=0;
+  lb.addEventListener('touchstart',e=>{sx=e.touches[0].clientX;},{passive:true});
+  lb.addEventListener('touchend',e=>{
+    const dx=e.changedTouches[0].clientX-sx;
+    if(Math.abs(dx)>50){document.getElementById(dx<0?'lbNext':'lbPrev').click();}
+  },{passive:true});
+})();
+</script>
 </body>
 </html>
